@@ -1,0 +1,42 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Environnements virtuels
+venv/
+env/
+.venv
+
+# IDE et éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+
+# Fichiers temporaires
+*.tmp
+*.bak
+
+# Fichiers de compilation Arduino/microcontrôleur (si applicable)
+*.o
+*.elf
+*.hex
+
+# Données sensibles
+.env
+config_local.py
+
+# Fichiers de projet spécifiques
+content/*
