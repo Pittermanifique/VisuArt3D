@@ -1,13 +1,16 @@
 from ursina import *
 from multiprocessing import Process, Queue, shared_memory
 import struct
+import os
+import subprocess
+
 
 class UrsinaViewer:
     def __init__(self, queue):
         self.app = Ursina()
         self.queue = queue
 
-        self.audio = None
+        self.current_sound = None
         self.audio_path = None
 
         try:
@@ -23,18 +26,20 @@ class UrsinaViewer:
         camera.look_at(self.center)
 
         window.color = color.black
-        window.borderless = True
+        window.borderless = False
         window.exit_button.enabled = False
         window.fps_counter.enabled = False 
         window.collider_counter.enabled = False
         window.entity_counter.enabled = False
-        window.fullscreen = True
-        window.always_on_top = True
+        window.fullscreen = False
 
         self.model = Entity(model="cube",scale=2, position=(0, 0, 0))
 
         self.controller = Entity()
         self.controller.update = self.update_logic
+
+        
+
 
     def update_logic(self):
         
@@ -50,6 +55,7 @@ class UrsinaViewer:
                 cmd, value = self.queue.get_nowait()
 
                 if cmd == "set_project":
+                    
                     project_path = Path("content") / value["project"]
                     
                     for f in project_path.iterdir():
@@ -69,19 +75,20 @@ class UrsinaViewer:
                     audio_path = project_path / f"{value['language']}.wav"
 
                     if not audio_path.exists():
-                        self.audio = None
                         self.audio_path = None
                     else:
                         self.audio_path = audio_path
+                    
+                    print("info: project set")
 
 
                 elif cmd == "play_audio":
-                    if self.audio:
-                        self.audio.stop()
-
                     if self.audio_path:
-                        self.audio = Audio(str(self.audio_path), loop=False, autoplay=True)
-                    
+                        print("info: play audio")
+                        subprocess.Popen(["paplay", self.audio_path])
+                    else:
+                        print("info: not audio file")
+
             except Exception as e:
                 print(f"Erreur Queue : {e}")
 
@@ -98,7 +105,10 @@ if __name__ == "__main__":
     p = Process(target=start_viewer, args=(q,))
     p.start()
 
-    q.put(("set_model","content//test2//test5.glb"))
+    project = {"project": "project1", "language": "fr"}
+    q.put(("set_project", project))
+    q.put(("play_audio", None))
 
     p.join()
+
 

@@ -6,3 +6,4 @@ opencv-python~=4.10.0
 fastapi~=0.128.0
 uvicorn~=0.40.0
 python-multipart~=0.0.22
+pygame~=2.6.1
