@@ -5,7 +5,7 @@ import math
 
 
 
-def face_detection(buffer_track,queue,camera_index=0):
+def face_detection(buffer_track,queue = None,camera_index=0):
 
     face_cascade_path = "haarcascade_frontalface_default.xml"
     palm_cascade_path = "palm.xml"
@@ -79,7 +79,8 @@ def face_detection(buffer_track,queue,camera_index=0):
                     assigned_id = old["id"]
                     lifetime = old["lifetime"] + 1
                     if lifetime == 15:
-                        queue.put(("play_audio", None))
+                        if queue != None:
+                            queue.put(("play_audio", None))
                     break
 
             # Si aucun ancien visage ne correspond → nouveau visage
