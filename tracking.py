@@ -13,8 +13,10 @@ def face_detection(buffer_track,queue = None,camera_index=0):
     face_cascade = cv2.CascadeClassifier(face_cascade_path)
 
     base_options = python.BaseOptions(model_asset_path='hand_landmarker.task')
-    options = vision.HandLandmarkerOptions(base_options=base_options,num_hands=2)
+    options = vision.HandLandmarkerOptions(base_options=base_options,num_hands=1)
     detector = vision.HandLandmarker.create_from_options(options)
+
+    life_pouce = 0
 
     cap = cv2.VideoCapture(camera_index)
 
@@ -84,7 +86,7 @@ def face_detection(buffer_track,queue = None,camera_index=0):
             cv2.putText(frame, f"ID {f['id']}", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
             cv2.circle(frame, (f["cx"], f["cy"]), 5, (0,0,255), -1)
 
-        if palms.hand_landmarks:
+        if palms.hand_landmarks and queue:
             for hand_landmarks in palms.hand_landmarks:
                 # 1. Récupérer les points nécessaires
                 thumb_tip = hand_landmarks[4]   # Bout du pouce
@@ -110,7 +112,12 @@ def face_detection(buffer_track,queue = None,camera_index=0):
 
                 # 3. Conclusion
                 if thumb_is_up and fingers_folded:
-                    print("POUCE EN L'AIR DÉTECTÉ !")
+                    life_pouce += 1
+                    if life_pouce == 15:
+                        life_pouce = 0
+                        queue.put(("play_audio", None))
+                else:
+                    life_pouce = 0
 
         cv2.imshow("Detection continue", frame)
 

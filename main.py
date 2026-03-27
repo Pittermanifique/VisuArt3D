@@ -33,10 +33,6 @@ def start_tracking(started_event,queue):
     
     face_detection(buffer,queue)
 
-    
-
-
-
 if __name__ == "__main__":
 
     # Supprimer ancienne mémoire
