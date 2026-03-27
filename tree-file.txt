@@ -1,25 +1,16 @@
-aficheur rotatif/
-├─ __pycache__/
-├─ content/
-│  ├─ test/
-│  │  ├─ fr.wav
-│  │  ├─ TEST1_u0_v0_diffuse.png
-│  │  └─ TEST1.glb
-│  └─ test2/
-│     ├─ fr.wav
-│     └─ test5.glb
-├─ web/
-│  ├─ pages/
-│  │  └─ userpage.html
-│  └─ static/
-│     ├─ userpage.css
-│     └─ userpage.js
-├─ .gitignore
-├─ afichage.py
-├─ api.py
-├─ haarcascade_frontalface_default.xml
-├─ main.py
-├─ palm.xml
-├─ requirements.txt
-├─ TEST1.glb.rcInfo
-└─ tracking.py
+├── afichage.py
+├── api.py
+├── haarcascade_frontalface_default.xml
+├── hand_landmarker.task
+├── main.py
+├── requirements.txt
+├── tracking.py
+├── tree-file.txt
+└── web
+    ├── pages
+    │   └── userpage.html
+    └── static
+        ├── userpage.css
+        └── userpage.js
+
+4 directories, 11 files
