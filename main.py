@@ -2,6 +2,8 @@ from multiprocessing import Process, Queue, shared_memory, Event
 import struct
 import time
 import uvicorn
+import serial
+import struct
 
 
 def start_viewer(queue):
@@ -70,8 +72,21 @@ if __name__ == "__main__":
     api_process = Process(target=start_api, args=(queue,))
     api_process.start()
 
-    # Boucle principale
+    ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+    time.sleep(4)
+
     while True:
         rot_track = struct.unpack("f", buffer_track[0:4])[0]
-        buffer_3D[0:4] = struct.pack("f", rot_track * 180)
+
+        raw_data = ser.readline().decode('utf-8').strip()
+
+        # Check if the string has more than one decimal point
+        if raw_data.count('.') <= 1 and raw_data.replace('.', '', 1).replace('-', '', 1).isdigit():
+            try:
+                buffer_3D[0:4] = struct.pack("f", float(raw_data))
+            except ValueError:
+                print(f"Skipping malformed data: {raw_data}")
+        else:
+            print(f"Invalid numeric format received: {raw_data}")
+            
         time.sleep(0.1)

@@ -8,3 +8,4 @@ uvicorn~=0.40.0
 python-multipart~=0.0.22
 pygame~=2.6.1
 mediapipe~=0.10.33
+pyserial~=3.5
