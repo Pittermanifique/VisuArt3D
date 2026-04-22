@@ -75,10 +75,19 @@ if __name__ == "__main__":
     ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
     time.sleep(4)
 
-    while True:
-        rot_track = struct.unpack("f", buffer_track[0:4])[0]
+    alumer = True
+    t = time.time()
 
+    while True:
+        rot_track = int((struct.unpack("f", buffer_track[0:4])[0])*100)
+        
         raw_data = ser.readline().decode('utf-8').strip()
+        print(raw_data)
+
+        data_to_send = str(rot_track + 100) + "\n"
+        ser.write(data_to_send.encode('utf-8'))
+        
+        print(str(rot_track + 100))
 
         # Check if the string has more than one decimal point
         if raw_data.count('.') <= 1 and raw_data.replace('.', '', 1).replace('-', '', 1).isdigit():
@@ -88,5 +97,6 @@ if __name__ == "__main__":
                 print(f"Skipping malformed data: {raw_data}")
         else:
             print(f"Invalid numeric format received: {raw_data}")
-            
+
+        
         time.sleep(0.1)

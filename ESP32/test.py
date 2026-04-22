@@ -66,13 +66,16 @@ while True:
 
         # Gestion UART
         if uart.any():
-            data = uart.read().decode('utf-8').strip()
-            if "1" in data:
-                lr.value(1)
-                lb.value(1)
-            elif "0" in data:
-                lr.value(0)
-                lb.value(0)
+            line = uart.readline() # Reads until \n
+            if line:
+                try:
+                    data = int(line.decode('utf-8').strip())
+                    # Logic for pins
+                    lr.value(1 if data < 100 else 0)
+                    lb.value(1 if data > 100 else 0)
+                except ValueError:
+                    # Handle cases where data might be malformed
+                    pass
                 
     except Exception as e:
         uart.write("error" + e + "\n")
