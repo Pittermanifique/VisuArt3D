@@ -36,6 +36,10 @@ def face_detection(buffer_track,queue = None,camera_index=0):
     while True:
         ret, frame = cap.read()
 
+        frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+        frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+        frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
 
@@ -55,13 +59,11 @@ def face_detection(buffer_track,queue = None,camera_index=0):
 
             assigned_id = None
 
-            # --- Matching avec les anciens centres ---
             for old in previous_faces:
                 if distance((cx, cy), (old["cx"], old["cy"])) < 50:
                     assigned_id = old["id"]
                     break
 
-            # Si aucun ancien visage ne correspond → nouveau visage
             if assigned_id is None:
                 assigned_id = next_face_id
                 next_face_id += 1
@@ -72,14 +74,11 @@ def face_detection(buffer_track,queue = None,camera_index=0):
 
         palms = detector.detect(mp_image)
 
-        # --- Affichage console ---
         if current_faces:
             buffer_track[:] = struct.pack("f", calculate_rot(current_faces[0]["cx"], width))
         else:
             buffer_track[:] = struct.pack("f", 0.0)
 
-
-        # --- Dessin ---
         for f in current_faces:
             x, y, w, h = f["bbox"]
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0,255,0), 2)
@@ -88,29 +87,21 @@ def face_detection(buffer_track,queue = None,camera_index=0):
 
         if palms.hand_landmarks and queue:
             for hand_landmarks in palms.hand_landmarks:
-                # 1. Récupérer les points nécessaires
-                thumb_tip = hand_landmarks[4]   # Bout du pouce
-                thumb_ip = hand_landmarks[3]    # Articulation sous le bout du pouce
-                index_tip = hand_landmarks[8]   # Bout de l'index
-                index_mcp = hand_landmarks[5]   # Base de l'index
+                thumb_tip = hand_landmarks[4]  
+                thumb_ip = hand_landmarks[3]    
+                index_tip = hand_landmarks[8]   
+                index_mcp = hand_landmarks[5]   
                 middle_tip = hand_landmarks[12]
                 ring_tip = hand_landmarks[16]
                 pinky_tip = hand_landmarks[20]
 
-                # 2. Vérifier les conditions du "Pouce en l'air"
-                # Rappel : en coordonnées MediaPipe, Y diminue quand on monte.
-                
-                # Le pouce est-il dirigé vers le haut ?
                 thumb_is_up = thumb_tip.y < thumb_ip.y 
 
-                # Les autres doigts sont-ils repliés ? 
-                # (On vérifie si le bout du doigt est plus bas que sa base/articulation)
                 fingers_folded = (index_tip.y > index_mcp.y and 
                                 middle_tip.y > hand_landmarks[9].y and 
                                 ring_tip.y > hand_landmarks[13].y and 
                                 pinky_tip.y > hand_landmarks[17].y)
 
-                # 3. Conclusion
                 if thumb_is_up and fingers_folded:
                     life_pouce += 1
                     if life_pouce == 15:
@@ -121,7 +112,6 @@ def face_detection(buffer_track,queue = None,camera_index=0):
 
         cv2.imshow("Detection continue", frame)
 
-        # Mise à jour pour la prochaine frame
         previous_faces = current_faces
 
         if cv2.waitKey(1) & 0xFF == 27:

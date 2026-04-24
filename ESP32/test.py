@@ -5,8 +5,33 @@ from math import sqrt, atan2, pi, asin, cos, sin
 import gc
 
 # Configuration des Pins
-lr = Pin(16, Pin.OUT)
-lb = Pin(17, Pin.OUT)
+lr = Pin(14, Pin.OUT)
+lb = Pin(13, Pin.OUT)
+
+IN1 = Pin(16, Pin.OUT)  
+IN2 = Pin(15, Pin.OUT)  
+ENA = Pin(17, Pin.OUT)
+
+# Fonction pour faire tourner le moteur dans le sens horaire
+def tourner_avant():
+    ENA.value(1)
+    IN1.value(1)
+    IN2.value(0)
+    print("Le moteur tourne en avant")
+
+# Fonction pour faire tourner le moteur dans le sens antihoraire
+def tourner_arriere():
+    ENA.value(1)
+    IN1.value(0)
+    IN2.value(1)
+    print("Le moteur tourne en arrière")
+
+# Fonction pour arrêter le moteur
+def arreter_moteur():
+    ENA.value(0)
+    IN1.value(0)
+    IN2.value(0)
+    print("Le moteur est arrêté")
 
 # Initialisation I2C et UART
 i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=400000)
@@ -71,8 +96,18 @@ while True:
                 try:
                     data = int(line.decode('utf-8').strip())
                     # Logic for pins
-                    lr.value(1 if data < 100 else 0)
-                    lb.value(1 if data > 100 else 0)
+                    if data < 100:
+                        lr.value(1)
+                        lb.value(0)
+                        tourner_avant()
+                    elif data > 100:
+                        lb.value(1)
+                        lr.value(0)
+                        tourner_arriere()
+                    else:
+                        lb.value(0)
+                        lr.value(0)
+                        arreter_moteur()
                 except ValueError:
                     # Handle cases where data might be malformed
                     pass
@@ -80,4 +115,3 @@ while True:
     except Exception as e:
         uart.write("error" + e + "\n")
     gc.collect()
-    sleep(0.1) # Petite pause pour stabiliser la boucle

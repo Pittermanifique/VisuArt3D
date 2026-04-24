@@ -97,6 +97,3 @@ if __name__ == "__main__":
                 print(f"Skipping malformed data: {raw_data}")
         else:
             print(f"Invalid numeric format received: {raw_data}")
-
-        
-        time.sleep(0.1)
