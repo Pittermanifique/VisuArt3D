@@ -1,4 +1,4 @@
-from machine import Pin, UART, I2C
+from machine import Pin, UART, I2C, PWM
 from lsm303 import LSM303D
 from time import sleep
 from math import sqrt, atan2, pi, asin, cos, sin
@@ -12,23 +12,26 @@ IN1 = Pin(16, Pin.OUT)
 IN2 = Pin(15, Pin.OUT)  
 ENA = Pin(17, Pin.OUT)
 
+pwm = PWM(ENA)
+pwm.freq(1000)  # Fréquence du PWM (peut être ajustée)
+pwm.duty(1023)   # Valeur du rapport cyclique (250-1023) pour la vitesse (ici à 50%)(min=250)
+
 # Fonction pour faire tourner le moteur dans le sens horaire
-def tourner_avant():
-    ENA.value(1)
+def tourner_avant(data):
+    pwm.duty((100-data)*10+20)
     IN1.value(1)
     IN2.value(0)
     print("Le moteur tourne en avant")
 
 # Fonction pour faire tourner le moteur dans le sens antihoraire
-def tourner_arriere():
-    ENA.value(1)
+def tourner_arriere(data):
+    pwm.duty(data*10+20)
     IN1.value(0)
     IN2.value(1)
     print("Le moteur tourne en arrière")
 
 # Fonction pour arrêter le moteur
 def arreter_moteur():
-    ENA.value(0)
     IN1.value(0)
     IN2.value(0)
     print("Le moteur est arrêté")
@@ -99,11 +102,11 @@ while True:
                     if data < 100:
                         lr.value(1)
                         lb.value(0)
-                        tourner_avant()
+                        tourner_avant(data)
                     elif data > 100:
                         lb.value(1)
                         lr.value(0)
-                        tourner_arriere()
+                        tourner_arriere(data - 100)
                     else:
                         lb.value(0)
                         lr.value(0)
