@@ -78,7 +78,10 @@ if __name__ == "__main__":
     alumer = True
     t = time.time()
 
-    while True:
+    c = 0
+
+    while True: 
+        c += 1
         rot_track = int((struct.unpack("f", buffer_track[0:4])[0])*100)
         
         raw_data = ser.readline().decode('utf-8').strip()
@@ -88,6 +91,10 @@ if __name__ == "__main__":
         ser.write(data_to_send.encode('utf-8'))
         
         print(str(rot_track + 100))
+
+        if raw_data == "1000" and c > 1000:
+            queue.put(("play_audio", None))
+            c = 0
 
         # Check if the string has more than one decimal point
         if raw_data.count('.') <= 1 and raw_data.replace('.', '', 1).replace('-', '', 1).isdigit():

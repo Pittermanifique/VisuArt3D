@@ -12,6 +12,8 @@ IN1 = Pin(16, Pin.OUT)
 IN2 = Pin(15, Pin.OUT)  
 ENA = Pin(17, Pin.OUT)
 
+BTN = Pin(12, Pin.IN, Pin.PULL_UP)
+
 pwm = PWM(ENA)
 pwm.freq(1000)  # Fréquence du PWM (peut être ajustée)
 pwm.duty(1023)   # Valeur du rapport cyclique (250-1023) pour la vitesse (ici à 50%)(min=250)
@@ -117,4 +119,9 @@ while True:
                 
     except Exception as e:
         uart.write("error" + e + "\n")
+        
+    if BTN.value() == 1:
+        uart.write("1000" + "\n")
     gc.collect()
+    
+    
