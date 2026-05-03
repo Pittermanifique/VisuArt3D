@@ -81,3 +81,8 @@ div#titre p {
     margin: 0px;
 }
 
+div#presentation {
+    margin: 20px 0px 0px 0px;
+    padding: 20px;
+    color: #304254;
+}
