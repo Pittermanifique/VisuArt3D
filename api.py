@@ -1,5 +1,6 @@
 import shutil
 from fastapi import FastAPI, UploadFile, File, Form
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 import os
@@ -9,8 +10,13 @@ from pathlib import Path
 app = FastAPI()
 queue = None
 
-app.mount("/static", StaticFiles(directory="web//static"), name="static")
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Autorise toutes les sources (à restreindre en production)
+    allow_credentials=True,
+    allow_methods=["*"], # Autorise POST, GET, etc.
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
@@ -127,11 +133,6 @@ async def set_project(project: str,
     queue.put(("set_project", project))
     
     return {"status": "sent", "project": project["project"], "language": project["language"]}
-
-@app.get("/userpage")
-async def get_userpage():
-    return FileResponse("web/pages/userpage.html")
-
 
 if __name__ == "__main__":
     import uvicorn
