@@ -7,7 +7,7 @@ from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 import numpy as np
 
-def face_detection(buffer_track,queue = None,camera_index=0):
+def face_detection(buffer_track,queue = None,camera_index=0, affichage = False):
 
     face_cascade_path = "haarcascade_frontalface_default.xml"
     face_cascade = cv2.CascadeClassifier(face_cascade_path)
@@ -109,8 +109,8 @@ def face_detection(buffer_track,queue = None,camera_index=0):
                         queue.put(("play_audio", None))
                 else:
                     life_pouce = 0
-
-        cv2.imshow("Detection continue", frame)
+        if affichage:
+            cv2.imshow("Detection continue", frame)
 
         previous_faces = current_faces
 

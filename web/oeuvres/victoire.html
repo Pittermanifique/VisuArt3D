@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="oeuvres.css">
+    <title>VisuArt3D</title>
+</head>
+<body>
+    <div id="entete">
+        <a href="../index.html" class="page"><h1>VisuArt3D</h1></a>
+        <a href="../oeuvres.html" class="page"><h1>Oeuvres</h1></a>
+        <a href="../nous.html" class="page"><h1>Qui sommes nous ?</h1></a>
+    </div>
+    <div id="barre"></div>
+    <div id="oeuvre">
+        <div id="container-presentation">
+            <div id="presentations">
+                <h1>La Victoire de Samothrace</h1>
+                <p>La Victoire de Samothrace est une célèbre sculpture de la Grèce antique réalisée vers
+190 avant Jésus-Christ. Elle représente Niké, la déesse grecque de la victoire, posée
+sur la proue d’un navire, comme si elle venait d’annoncer une victoire maritime.
+
+Cette œuvre impressionne par le mouvement de ses ailes et par le drapé de ses
+vêtements, qui semblent soufflés par le vent. Même si la statue a perdu sa tête et ses
+bras, elle transmet toujours une grande sensation de puissance et de mouvement.
+
+Découverte en 1863 sur l’île de Samothrace par l’archéologue français Charles
+Champoiseau, elle est aujourd’hui exposée au Musée du Louvre, où elle est devenue
+l’une des œuvres les plus admirées du musée.
+                </p>
+            </div>
+            <button id="bouton" class="bouton">lancer</button>
+        </div>
+        <div id="image">
+            <img src="../assets/victoire.png" alt="image d'exeple">
+        </div>
+    </div>
+
+    <script>
+
+        document.getElementById("bouton").addEventListener("click", envoyerDonnees);
+
+        async function envoyerDonnees() {
+            // Vos variables récupérées depuis un formulaire par exemple
+            const monProjet = "victoire";
+            const maLangue = "fr";
+
+            // Construction de l'URL avec les paramètres query
+            const url = `https://votre-api.com/votre-endpoint?project=${monProjet}&language=${maLangue}`;
+
+            try {
+                const reponse = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                });
+
+                if (reponse.ok) {
+                    const resultat = await reponse.json();
+                    console.log("Succès :", resultat);
+                } else {
+                    console.error("Erreur serveur :", reponse.status);
+                }
+            } catch (erreur) {
+                console.error("Erreur de connexion :", erreur);
+            }
+        }
+    </script>
+</body>
+</html>

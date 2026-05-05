@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="oeuvres.css">
+    <title>VisuArt3D</title>
+</head>
+<body>
+    <div id="entete">
+        <a href="../index.html" class="page"><h1>VisuArt3D</h1></a>
+        <a href="../oeuvres.html" class="page"><h1>Oeuvres</h1></a>
+        <a href="../nous.html" class="page"><h1>Qui sommes nous ?</h1></a>
+    </div>
+    <div id="barre"></div>
+    <div id="oeuvre">
+        <div id="container-presentation">
+            <div id="presentations">
+                <h1>Le Penseur</h1>
+                <p>Le Penseur est une sculpture célèbre réalisée par l’artiste français Auguste Rodin à la fin du XIXᵉ siècle. Elle représente un homme assis, penché en avant, le menton posé sur sa main, profondément plongé dans ses pensées.
+
+À l’origine, cette figure faisait partie d’une œuvre plus vaste appelée La Porte de l’Enfer, inspirée de La Divine Comédiede Dante.
+
+La posture tendue du corps montre que penser demande un effort intense, à la fois physique et mental.
+
+Aujourd’hui, Le Penseur est devenu un symbole universel de la réflexion, de la philosophie et de la condition humaine, et l’une des sculptures les plus célèbres au monde.
+                </p>
+            </div>
+            <button id="bouton" class="bouton">lancer</button>
+        </div>
+        <div id="image">
+            <img src="../assets/penseur.png" alt="image d'exeple">
+        </div>
+    </div>
+
+    <script>
+
+        document.getElementById("bouton").addEventListener("click", envoyerDonnees);
+
+        async function envoyerDonnees() {
+            // Vos variables récupérées depuis un formulaire par exemple
+            const monProjet = "penseur";
+            const maLangue = "fr";
+
+            // Construction de l'URL avec les paramètres query
+            const url = `https://votre-api.com/votre-endpoint?project=${monProjet}&language=${maLangue}`;
+
+            try {
+                const reponse = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                });
+
+                if (reponse.ok) {
+                    const resultat = await reponse.json();
+                    console.log("Succès :", resultat);
+                } else {
+                    console.error("Erreur serveur :", reponse.status);
+                }
+            } catch (erreur) {
+                console.error("Erreur de connexion :", erreur);
+            }
+        }
+    </script>
+</body>
+</html>

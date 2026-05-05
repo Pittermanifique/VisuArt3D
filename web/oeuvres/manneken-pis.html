@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="oeuvres.css">
+    <title>VisuArt3D</title>
+</head>
+<body>
+    <div id="entete">
+        <a href="../index.html" class="page"><h1>VisuArt3D</h1></a>
+        <a href="../oeuvres.html" class="page"><h1>Oeuvres</h1></a>
+        <a href="../nous.html" class="page"><h1>Qui sommes nous ?</h1></a>
+    </div>
+    <div id="barre"></div>
+    <div id="oeuvre">
+        <div id="container-presentation">
+            <div id="presentations">
+                <h1>Le Manneken-Pis</h1>
+                <p>Le Manneken-Pis est une petite statue très célèbre située au cœur de Bruxelles. Elle représente un petit garçon en train d’uriner dans une fontaine.
+
+La statue actuelle a été réalisée en 1619 par le sculpteur flamand Jérôme Duquesnoy l’Ancien. Malgré sa petite taille, d’environ 55 centimètres, elle est devenue l’un des symboles les plus connus de la ville.
+
+Au fil du temps, le Manneken-Pis est devenu une véritable tradition bruxelloise. Il possède même une garde-robe de centaines de costumes qui lui sont parfois offerts par différents pays ou lors d’événements particuliers.
+
+Aujourd’hui, cette statue attire chaque année des milliers de visiteurs et représente l’humour et l’esprit libre de Bruxelles.
+                </p>
+            </div>
+            <button id="bouton" class="bouton">lancer</button>
+        </div>
+        <div id="image">
+            <img src="../assets/manneken-pis.png" alt="image d'exeple">
+        </div>
+    </div>
+
+    <script>
+
+        document.getElementById("bouton").addEventListener("click", envoyerDonnees);
+
+        async function envoyerDonnees() {
+            // Vos variables récupérées depuis un formulaire par exemple
+            const monProjet = "mannehen-pis";
+            const maLangue = "fr";
+
+            // Construction de l'URL avec les paramètres query
+            const url = `https://votre-api.com/votre-endpoint?project=${monProjet}&language=${maLangue}`;
+
+            try {
+                const reponse = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                });
+
+                if (reponse.ok) {
+                    const resultat = await reponse.json();
+                    console.log("Succès :", resultat);
+                } else {
+                    console.error("Erreur serveur :", reponse.status);
+                }
+            } catch (erreur) {
+                console.error("Erreur de connexion :", erreur);
+            }
+        }
+    </script>
+</body>
+</html>

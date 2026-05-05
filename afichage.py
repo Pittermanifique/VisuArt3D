@@ -31,7 +31,7 @@ class UrsinaViewer:
         window.fps_counter.enabled = False 
         window.collider_counter.enabled = False
         window.entity_counter.enabled = False
-        window.fullscreen = False
+        window.fullscreen = True
 
         self.model = Entity(model="cube",scale=2, position=(0, 0, 0))
 
@@ -66,7 +66,7 @@ class UrsinaViewer:
                             center = bounds.center
                             self.model.origin = center
                             if max_dim > 0:
-                                target_size = 5
+                                target_size = 8
                                 self.model.scale = target_size / max_dim
                             self.model.position = (0, 0, 0)
                             break
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     p = Process(target=start_viewer, args=(q,))
     p.start()
 
-    project = {"project": "project1", "language": "fr"}
+    project = {"project": "penseur", "language": "fr"}
     q.put(("set_project", project))
     q.put(("play_audio", None))
 
