@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f1ed;
+    
+    display: flex; 
+    flex-direction: column;   
+}
+
+a:-webkit-any-link {
+    color: #304254;
+    text-decoration: none;
+}
+
+div#entete {
+    margin: 0px;
+    margin-right: 5%;
+    padding: 0px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 3%;
+    align-items: center;
+    background-color: #f4f1ed;
+    flex-wrap: nowrap;
+}
+
+.page h1 {
+    font-size: 20px;
+    color: #304254;
+}
+
+.page h1:hover {
+    color: #4e6a88;;
+    text-decoration: none;
+}
+
+div#barre {
+    width: 100%;
+    height: 1px;
+    background-color: #304254;
+}
+
+div#oeuvre {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+div#container-presentation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 20px;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+div#presentations {
+    border: #304254 solid 1px;
+    border-radius: 20px;
+    width: 75%;
+    padding: 0px 10px 0px 10px;
+}
+
+div#presentations h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: #304254;
+    margin-top: 20px;
+}
+
+.bouton {
+    background-color: #304254;
+    color: #f4f1ed;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 20px;
+    width: 20%;
+    height: 50px;
+}
+
+.bouton:hover {
+    background-color: #4e6a88;
+    color: #f4f1ed;
+    text-decoration: none;
+}
+
+div#image {
+    width: 100%; 
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+div#image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+}
+

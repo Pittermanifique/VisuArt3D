@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="oeuvres.css">
+    <title>VisuArt3D</title>
+</head>
+<body>
+    <div id="entete">
+        <a href="../index.html" class="page"><h1>VisuArt3D</h1></a>
+        <a href="../oeuvres.html" class="page"><h1>Oeuvres</h1></a>
+        <a href="../nous.html" class="page"><h1>Qui sommes nous ?</h1></a>
+    </div>
+    <div id="barre"></div>
+    <div id="oeuvre">
+        <div id="container-presentation">
+            <div id="presentations">
+                <h1>La Chouette de Dijon</h1>
+                <p>Symbole emblématique de la ville de Dijon, cette petite sculpture de pierre du XVème siècle orne le flanc nord de l'église Notre-Dame. Bien que sa fonction originelle demeure mystérieuse — signature d'architecte ou symbole de sagesse — elle est devenue au fil des siècles un véritable objet de dévotion populaire.
+
+Sa silhouette, aujourd'hui lissée par l'érosion et le passage des mains, témoigne d'une tradition vivante : la légende raconte qu'en la caressant de la main gauche (le côté du cœur), elle exauce les vœux des passants. Témoin fragile de l'histoire médiévale bourguignonne, elle incarne désormais l'identité et l'esprit protecteur de la cité ducale.
+                </p>
+            </div>
+            <button id="bouton" class="bouton">lancer</button>
+        </div>
+        <div id="image">
+            <img src="../assets/chouette.jpeg" alt="image d'exeple">
+        </div>
+    </div>
+
+    <script>
+        
+        document.getElementById("bouton").addEventListener("click", envoyerDonnees);
+
+        async function envoyerDonnees() {
+            // Vos variables récupérées depuis un formulaire par exemple
+            const monProjet = "chouette";
+            const maLangue = "fr";
+
+            // Construction de l'URL avec les paramètres query
+            const url = `http://192.168.2.133:8000/set_project?project=${monProjet}&language=${maLangue}`;
+
+            try {
+                const reponse = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                });
+
+                if (reponse.ok) {
+                    const resultat = await reponse.json();
+                    console.log("Succès :", resultat);
+                } else {
+                    console.error("Erreur serveur :", reponse.status);
+                }
+            } catch (erreur) {
+                console.error("Erreur de connexion :", erreur);
+            }
+        }
+    </script>
+</body>
+</html>

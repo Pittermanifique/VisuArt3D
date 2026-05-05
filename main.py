@@ -92,7 +92,7 @@ if __name__ == "__main__":
         
         print(str(rot_track + 100))
 
-        if raw_data == "1000" and c > 1000:
+        if raw_data == "1000" and c > 10:
             queue.put(("play_audio", None))
             c = 0
 

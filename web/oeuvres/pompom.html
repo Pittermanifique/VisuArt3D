@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="oeuvres.css">
+    <title>VisuArt3D</title>
+</head>
+<body>
+    <div id="entete">
+        <a href="../index.html" class="page"><h1>VisuArt3D</h1></a>
+        <a href="../oeuvres.html" class="page"><h1>Oeuvres</h1></a>
+        <a href="../nous.html" class="page"><h1>Qui sommes nous ?</h1></a>
+    </div>
+    <div id="barre"></div>
+    <div id="oeuvre">
+        <div id="container-presentation">
+            <div id="presentations">
+                <h1>L'ours Pompom</h1>
+                <p>L'Ours blanc est une statue animalière du sculpteur français François Pompon (1855-1933). L'artiste opte pour la simplification des formes dans ses sculptures à partir de 1905. Il lisse les surfaces sensibles et débarrasse ses représentations animales de toutes fioritures (qu'il appelait falbalas). Un modèle de l'Ours blanc apparu au Salon d'Automne de 1922 tranche par son modernisme sur la sculpture héritée du XIXe siècle.
+
+La sculpture a été réalisée en plusieurs formats et matériaux (plâtre, pierre, bronze, résine). L'exemplaire le plus connu se trouve au musée d'Orsay à Paris depuis 1986.</p>
+            </div>
+            <button id="bouton" class="bouton">lancer</button>
+        </div>
+        <div id="image">
+            <img src="../assets/pompom.jpg" alt="image d'exeple">
+        </div>
+    </div>
+    // On récupère le bouton par son ID et on lui dit d'exécuter la fonction au clic
+    
+    <script>
+
+        document.getElementById("bouton").addEventListener("click", envoyerDonnees);
+
+        async function envoyerDonnees() {
+            // Vos variables récupérées depuis un formulaire par exemple
+            const monProjet = "pompom";
+            const maLangue = "fr";
+
+            // Construction de l'URL avec les paramètres query
+            const url = `http://192.168.2.133:8000/set_project?project=${monProjet}&language=${maLangue}`;
+
+            try {
+                const reponse = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                });
+
+                if (reponse.ok) {
+                    const resultat = await reponse.json();
+                    console.log("Succès :", resultat);
+                } else {
+                    console.error("Erreur serveur :", reponse.status);
+                }
+            } catch (erreur) {
+                console.error("Erreur de connexion :", erreur);
+            }
+        }
+    </script>
+</body>
+</html>
