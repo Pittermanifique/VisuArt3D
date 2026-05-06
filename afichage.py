@@ -105,7 +105,7 @@ if __name__ == "__main__":
     p = Process(target=start_viewer, args=(q,))
     p.start()
 
-    project = {"project": "penseur", "language": "fr"}
+    project = {"project": "balloon-dog", "language": "fr"}
     q.put(("set_project", project))
     q.put(("play_audio", None))
 

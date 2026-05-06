@@ -5,12 +5,18 @@ from fastapi.staticfiles import StaticFiles
 import os
 import json
 from pathlib import Path
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 queue = None
 
-app.mount("/static", StaticFiles(directory="web//static"), name="static")
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # En prod, remplace "*" par l'URL de ton site
+    allow_credentials=True,
+    allow_methods=["*"], # Autorise POST, OPTIONS, etc.
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
@@ -127,11 +133,6 @@ async def set_project(project: str,
     queue.put(("set_project", project))
     
     return {"status": "sent", "project": project["project"], "language": project["language"]}
-
-@app.get("/userpage")
-async def get_userpage():
-    return FileResponse("web/pages/userpage.html")
-
 
 if __name__ == "__main__":
     import uvicorn
