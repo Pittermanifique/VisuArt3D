@@ -43,7 +43,7 @@ Aujourd’hui, Le Penseur est devenu un symbole universel de la réflexion, de l
             const maLangue = "fr";
 
             // Construction de l'URL avec les paramètres query
-            const url = `https://votre-api.com/votre-endpoint?project=${monProjet}&language=${maLangue}`;
+            const url = `http://192.168.4.10:8000/set_project?project=${monProjet}&language=${maLangue}`;
 
             try {
                 const reponse = await fetch(url, {
