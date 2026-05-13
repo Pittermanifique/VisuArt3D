@@ -13,7 +13,7 @@ def face_detection(buffer_track,queue = None,camera_index=0):
     face_cascade = cv2.CascadeClassifier(face_cascade_path)
 
     base_options = python.BaseOptions(model_asset_path='hand_landmarker.task')
-    options = vision.HandLandmarkerOptions(base_options=base_options,num_hands=16)
+    options = vision.HandLandmarkerOptions(base_options=base_options,num_hands=4)
     detector = vision.HandLandmarker.create_from_options(options)
 
     life_pouce = 0
@@ -22,7 +22,8 @@ def face_detection(buffer_track,queue = None,camera_index=0):
 
     previous_faces = []
 
-    next_face_id = 0      
+    next_face_id = 0 
+    ratio = 60   
 
     def distance(p1, p2):
         return math.hypot(p1[0] - p2[0], p1[1] - p2[1])
@@ -36,9 +37,14 @@ def face_detection(buffer_track,queue = None,camera_index=0):
     while True:
         ret, frame = cap.read()
 
+        height, width = frame.shape[:2]
+
         frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
         frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
         frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+
+        dimension = (int(height * ratio/100),int(width * ratio/100))
+        frame = cv2.resize(frame,dimension, interpolation = cv2.INTER_AREA)
 
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
@@ -47,7 +53,6 @@ def face_detection(buffer_track,queue = None,camera_index=0):
             print("Erreur : impossible de lire la caméra.")
             break
 
-        height, width = frame.shape[:2]
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(gray, 1.2, 5)
 

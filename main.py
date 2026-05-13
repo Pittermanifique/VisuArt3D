@@ -92,9 +92,12 @@ if __name__ == "__main__":
         
         print(str(rot_track + 100))
 
-        if raw_data == "1000" and c > 10:
+        if raw_data == "1000" and c > 300:
             queue.put(("play_audio", None))
             c = 0
+            continue
+        elif raw_data == "1000":
+            continue
 
         # Check if the string has more than one decimal point
         if raw_data.count('.') <= 1 and raw_data.replace('.', '', 1).replace('-', '', 1).isdigit():

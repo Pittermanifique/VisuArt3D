@@ -72,7 +72,7 @@ class UrsinaViewer:
                             break
 
 
-                    audio_path = project_path / f"{value['language']}.wav"
+                    audio_path = project_path / f"{value['language']}.mp3"
 
                     if not audio_path.exists():
                         self.audio_path = None

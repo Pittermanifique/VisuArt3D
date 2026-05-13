@@ -12,7 +12,7 @@ IN1 = Pin(16, Pin.OUT)
 IN2 = Pin(15, Pin.OUT)  
 ENA = Pin(17, Pin.OUT)
 
-BTN = Pin(12, Pin.IN, Pin.PULL_UP)
+BTN = Pin(12, Pin.IN, Pin.PULL_DOWN)
 
 pwm = PWM(ENA)
 pwm.freq(1000)  # Fréquence du PWM (peut être ajustée)
@@ -122,6 +122,8 @@ while True:
         
     if BTN.value() == 1:
         uart.write("1000" + "\n")
+        
+    time.sleep(0.05)
     gc.collect()
     
     
