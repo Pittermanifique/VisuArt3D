@@ -12,12 +12,6 @@ def face_detection(buffer_track,queue = None,camera_index=0):
     face_cascade_path = "haarcascade_frontalface_default.xml"
     face_cascade = cv2.CascadeClassifier(face_cascade_path)
 
-    base_options = python.BaseOptions(model_asset_path='hand_landmarker.task')
-    options = vision.HandLandmarkerOptions(base_options=base_options,num_hands=4)
-    detector = vision.HandLandmarker.create_from_options(options)
-
-    life_pouce = 0
-
     cap = cv2.VideoCapture(camera_index)
 
     previous_faces = []
@@ -44,10 +38,9 @@ def face_detection(buffer_track,queue = None,camera_index=0):
         frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
         dimension = (int(height * ratio/100),int(width * ratio/100))
-        frame = cv2.resize(frame,dimension, interpolation = cv2.INTER_AREA)
+       # frame = cv2.resize(frame,dimension, interpolation = cv2.INTER_AREA)
 
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
 
         if not ret:
             print("Erreur : impossible de lire la caméra.")
@@ -77,10 +70,8 @@ def face_detection(buffer_track,queue = None,camera_index=0):
         
         current_faces.sort(key=lambda f: f["bbox"][2] * f["bbox"][3], reverse=True)
 
-        palms = detector.detect(mp_image)
-
         if current_faces:
-            buffer_track[:] = struct.pack("f", calculate_rot(current_faces[0]["cx"], width))
+            buffer_track[:] = struct.pack("f", calculate_rot(current_faces[0]["cx"], height))
         else:
             buffer_track[:] = struct.pack("f", 0.0)
 
@@ -89,32 +80,7 @@ def face_detection(buffer_track,queue = None,camera_index=0):
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0,255,0), 2)
             cv2.putText(frame, f"ID {f['id']}", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
             cv2.circle(frame, (f["cx"], f["cy"]), 5, (0,0,255), -1)
-
-        if palms.hand_landmarks and queue:
-            for hand_landmarks in palms.hand_landmarks:
-                thumb_tip = hand_landmarks[4]  
-                thumb_ip = hand_landmarks[3]    
-                index_tip = hand_landmarks[8]   
-                index_mcp = hand_landmarks[5]   
-                middle_tip = hand_landmarks[12]
-                ring_tip = hand_landmarks[16]
-                pinky_tip = hand_landmarks[20]
-
-                thumb_is_up = thumb_tip.y < thumb_ip.y 
-
-                fingers_folded = (index_tip.y > index_mcp.y and 
-                                middle_tip.y > hand_landmarks[9].y and 
-                                ring_tip.y > hand_landmarks[13].y and 
-                                pinky_tip.y > hand_landmarks[17].y)
-
-                if thumb_is_up and fingers_folded:
-                    life_pouce += 1
-                    if life_pouce == 15:
-                        life_pouce = 0
-                        queue.put(("play_audio", None))
-                else:
-                    life_pouce = 0
-        
+               
         cv2.imshow("Detection continue", frame)
 
         previous_faces = current_faces

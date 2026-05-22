@@ -20,23 +20,20 @@ pwm.duty(1023)   # Valeur du rapport cyclique (250-1023) pour la vitesse (ici à
 
 # Fonction pour faire tourner le moteur dans le sens horaire
 def tourner_avant(data):
-    pwm.duty((100-data)*10+20)
+    pwm.duty((100-data)*10)
     IN1.value(1)
     IN2.value(0)
-    print("Le moteur tourne en avant")
 
 # Fonction pour faire tourner le moteur dans le sens antihoraire
 def tourner_arriere(data):
-    pwm.duty(data*10+20)
+    pwm.duty(data*10)
     IN1.value(0)
     IN2.value(1)
-    print("Le moteur tourne en arrière")
 
 # Fonction pour arrêter le moteur
 def arreter_moteur():
     IN1.value(0)
     IN2.value(0)
-    print("Le moteur est arrêté")
 
 # Initialisation I2C et UART
 i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=400000)
@@ -101,11 +98,11 @@ while True:
                 try:
                     data = int(line.decode('utf-8').strip())
                     # Logic for pins
-                    if data < 100:
+                    if data < 80:
                         lr.value(1)
                         lb.value(0)
                         tourner_avant(data)
-                    elif data > 100:
+                    elif data > 120:
                         lb.value(1)
                         lr.value(0)
                         tourner_arriere(data - 100)
@@ -123,7 +120,6 @@ while True:
     if BTN.value() == 1:
         uart.write("1000" + "\n")
         
-    time.sleep(0.05)
     gc.collect()
     
     
